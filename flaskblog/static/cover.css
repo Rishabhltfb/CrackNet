@@ -1,0 +1,23 @@
+*{
+	margin:0;
+	padding:0;
+}
+body{
+	color: #fff;
+	font-family: 'Indie Flower', cursive;
+}
+.head-con{
+	text-align: center;
+}
+.cover-row1{
+	height:65vh;
+	z-index:2;
+}
+.btn-lg{
+	width: 300px;
+}
+.cover-row2{
+	margin-left: 5px;
+	height:20vh;
+	text-align: center;
+}
