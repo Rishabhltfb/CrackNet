@@ -3,8 +3,8 @@ import secrets
 from PIL import Image
 from flask import render_template, url_for, flash, redirect, request, abort
 from flaskblog import app, db, bcrypt
-from flaskblog.forms import RegistrationForm, LoginForm, UpdateAccountForm, PostForm
-from flaskblog.models import User, Post
+from flaskblog.forms import RegistrationForm, LoginForm, UpdateAccountForm, PostForm, CommentForm
+from flaskblog.models import User, Post, Comment
 from flask_login import login_user, current_user, logout_user, login_required
 
 
@@ -161,3 +161,33 @@ def user_posts(username):
         .paginate(page=page, per_page=5)
     return render_template('user_posts.html', posts=posts, user=user)
 
+@app.route("/likes/<int:post_id>", methods=['POST', 'GET'])
+@login_required
+def likes(post_id):
+    post = Post.query.get_or_404(post_id) 
+    lst = list(map(int,post.liked_users.split()))
+    if current_user.id in lst:
+        post.likes -= 1
+        lst.remove(current_user.id)
+        flash('UnLiked!', 'danger')
+    else:         
+        lst.append(current_user.id)
+        post.likes += 1
+        flash('Like Done!', 'success')
+    lst = list(map(str,lst))
+    post.liked_users = " ".join(lst)
+    db.session.commit()
+    return redirect(url_for('home', post_id=post.id))
+
+@app.route("/comments/<int:post_id>", methods=['POST', 'GET'])
+@login_required
+def comments(post_id):
+    form = CommentForm()
+    if form.validate_on_submit():
+        comment = Comment(content=form.content.data, user_id=current_user.id, post_id=post_id)
+        db.session.add(comment)
+        db.session.commit()
+        flash('Commented!', 'success')
+        return redirect(url_for('comments',post_id=post_id))
+    comments = Comment.query.filter_by(post_id=post_id).all()
+    return render_template('comments.html', comments=comments,legend='Comments',form=form)

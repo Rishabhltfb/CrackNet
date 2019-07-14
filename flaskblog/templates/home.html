@@ -10,12 +10,13 @@
             </div>
             <h2><a class="article-title" href="{{ url_for('post', post_id=post.id) }}">{{ post.title }}</a></h2>
             <p class="article-content">{{ post.content }}</p>
-          </div>
-          <div class="like-btn-box">
-              <i class="far fa-thumbs-up">Like</i>
-              <i class="far fa-thumbs-down">Dislike</i>
+            <div class="like-btn-box border-top pt-3"> 
+              <a href="{{ url_for('likes', post_id=post.id) }}"><i class="far fa-thumbs-up ml-3"> {{ post.likes }} Likes</i></a>
+              <a href="{{ url_for('comments', post_id=post.id) }}"><i class="far fa-comment ml-3"></i> Comment</i></a>
+            </div>
           </div>
         </article>
+        
 
     {% endfor %}
     {% for page_num in posts.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
