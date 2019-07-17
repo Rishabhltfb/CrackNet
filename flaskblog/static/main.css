@@ -9,7 +9,8 @@ body {
   }
   
   .bg-steel {
-    background-color: #5f788a;
+    /* background-color: #5f788a; */
+    background-color: #313131;
   }
   
   .site-header .navbar-nav .nav-link {
@@ -78,7 +79,29 @@ body {
   .account-heading {
     font-size: 2.5rem;
   }
-  
-  #not-clicked{
-    color: red;
+  /* my code */
+  a:hover{
+    text-decoration: none;
   }
+  /* a.comment{
+    color:black;
+  } */
+  
+  .acc-nav-img{
+    border-radius:50%;
+    height:30px;
+    width:30px;
+  }
+
+@media(max-width:767px){
+  .account-heading {
+    font-size: 1.5rem;
+  }
+  .account-img {
+    height: 60px;
+    width: 50x;
+    border-radius: 50%;
+    margin-right: 20px;
+    margin-bottom: 16px;
+  }
+}

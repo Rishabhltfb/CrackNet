@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}">
-    <link rel="shortcut icon" href="{{ url_for('static', filename='profile_pics/logo2.png')}}" type="image/png">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='profile_pics/logo.png')}}" type="image/png">
     {% if title %}
         <title>CrackNet - {{ title }}</title>
     {% else %}
@@ -44,7 +44,7 @@
                     <a class="dropdown-item" href="#">Something else here</a>
                   </div>
                 </li>
-                <a class="nav-item nav-link" href="{{ url_for('account') }}"><i class="fas fa-user-circle"></i> Account</a>
+                <a class="nav-item nav-link" href="{{ url_for('account') }}"><img class="acc-nav-img" src="{{ url_for('static', filename='profile_pics/' + current_user.image_file) }}">  {{current_user.username}}</a>
                 <a class="nav-item nav-link" href="{{ url_for('logout') }}"><i class="fas fa-sign-out-alt"></i> Logout</a>
               {% else %}
                 <a class="nav-item nav-link" href="{{ url_for('login') }}"><i class="fas fa-sign-in-alt"></i> Login</a>
@@ -71,7 +71,7 @@
         </div>
         <div class="col-md-4">
           <div class="content-section">
-            <h3>Our Sidebar</h3>
+            <h3>Notifications</h3>
             <p class='text-muted'>You can put any information here you'd like.
               <ul class="list-group">
                 <li class="list-group-item list-group-item-light">Latest Posts</li>

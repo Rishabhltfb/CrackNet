@@ -6,8 +6,16 @@ body{
 	color: #fff;
 	font-family: 'Indie Flower', cursive;
 }
+#Logo{
+	height:120px;
+	width:120px;
+	color:white;
+}
 .head-con{
 	text-align: center;
+}
+.bg-color{
+	background-color:#313131;
 }
 .cover-row1{
 	height:65vh;
