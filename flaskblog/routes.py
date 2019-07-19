@@ -98,8 +98,9 @@ def account():
         form.username.data = current_user.username
         form.email.data = current_user.email
     image_file = url_for('static', filename='profile_pics/' + current_user.image_file)
+    connections = current_user.connections
     return render_template('account.html', title='Account',
-                           image_file=image_file, form=form, posts_count=posts_count)
+                           image_file=image_file, form=form, posts_count=posts_count, connections = connections)
 
 
 @app.route("/post/new", methods=['GET', 'POST'])
@@ -207,5 +208,54 @@ def help_desk():
 def profile(username):
     user = User.query.filter_by(username=username).first()
     posts_count = len(Post.query.filter_by(user_id=user.id).all())
+    connections = user.connections
+    connected_users = user.connected_users
     image_file = url_for('static', filename='profile_pics/' + user.image_file)
-    return render_template('profile.html', user=user, image_file=image_file, posts_count=posts_count)
+    current_lst = list(map(int,current_user.connected_users.split()))
+    if user.id in current_lst:
+        is_connected = True
+    else:
+        is_connected = False
+    return render_template('profile.html', user=user, image_file=image_file, posts_count=posts_count, connections = connections, connected_users= connected_users, is_connected=is_connected)
+
+@app.route("/connections/<int:user_id>")
+@login_required
+def connections(user_id):
+    user = User.query.get_or_404(user_id)
+    lst = list(map(int,user.connected_users.split()))
+    current_lst = list(map(int,current_user.connected_users.split()))
+    if current_user.id in lst:
+        user.connections -=1
+        current_user.connections -=1
+        lst.remove(current_user.id)
+        current_lst.remove(user.id)
+    else:
+        user.connections +=1
+        current_user.connections +=1
+        lst.append(current_user.id)
+        current_lst.append(user.id)
+    lst = list(map(str,lst))
+    current_lst=list(map(str,current_lst))
+    user.connected_users = " ".join(lst)
+    current_user.connected_users = " ".join(current_lst)
+    db.session.commit()
+    return redirect(url_for('profile', username = user.username))
+
+@app.route("/user_list/<string:content>/<int:id>", methods=['POST', 'GET'])
+@login_required
+def user_list(content, id):
+    if content=='like':
+        post = Post.query.filter_by(id=id).first()
+        liked_users = post.liked_users
+        lst = list(map(int,liked_users.split()))
+        legend="User Likes"
+    elif content=='connections':
+        user = User.query.filter_by(id=id).first()
+        connected_users = user.connected_users
+        lst = list(map(int,connected_users.split()))
+        legend="Connections"
+    users=[]
+    for i in lst:
+        user_1 = User.query.filter_by(id=i).first()
+        users.append(user_1)        
+    return render_template('user_list.html', users=users, legend=legend)    
