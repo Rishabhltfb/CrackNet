@@ -38,8 +38,9 @@
                     <i class="fab fa-buffer"></i> Special Features
                   </a>
                   <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="{{ url_for('material') }}"><i class="fas fa-book-open"></i> Material</a>
-                    <a class="dropdown-item" href="#">Freshers Help-Desk</a>
+                    <a class="dropdown-item" href="{{ url_for('material') }}"><i class="fas fa-user-graduate"></i> Study Material</a>
+                    <a class="dropdown-item" href="{{ url_for('help_desk') }}"><i class="fas fa-hands-helping"></i> Freshers Help-Desk</a>
+                    <a class="dropdown-item" href="{{ url_for('clubs') }}"><i class="fas fa-users"></i> Clubs</a>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="#">Something else here</a>
                   </div>
@@ -57,7 +58,7 @@
     </header>
     <main role="main" class="container">
       <div class="row">
-        <div class="col-md-8">
+        <div class="col-md-12">
           {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
               {% for category, message in messages %}
@@ -69,7 +70,7 @@
           {% endwith %}
           {% block content %}{% endblock %}
         </div>
-        <div class="col-md-4">
+        <!-- <div class="col-md-4">
           <div class="content-section">
             <h3>Notifications</h3>
             <p class='text-muted'>You can put any information here you'd like.
@@ -81,7 +82,7 @@
               </ul>
             </p>
           </div>
-        </div>
+        </div> -->
       </div>
     </main>
 

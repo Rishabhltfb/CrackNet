@@ -20,6 +20,7 @@ def home():
     return render_template('home.html', posts=posts)
 
 @app.route("/material")
+@login_required
 def material():
     return render_template('material.html', title='Material')
 
@@ -83,6 +84,7 @@ def save_picture(form_picture):
 @login_required
 def account():
     form = UpdateAccountForm()
+    posts_count = len(Post.query.filter_by(user_id=current_user.id).all())
     if form.validate_on_submit():
         if form.picture.data:
             picture_file = save_picture(form.picture.data)
@@ -97,7 +99,7 @@ def account():
         form.email.data = current_user.email
     image_file = url_for('static', filename='profile_pics/' + current_user.image_file)
     return render_template('account.html', title='Account',
-                           image_file=image_file, form=form)
+                           image_file=image_file, form=form, posts_count=posts_count)
 
 
 @app.route("/post/new", methods=['GET', 'POST'])
@@ -191,3 +193,19 @@ def comments(post_id):
         return redirect(url_for('comments',post_id=post_id))
     comments = Comment.query.filter_by(post_id=post_id).all()
     return render_template('comments.html', comments=comments,legend='Comments',form=form)
+
+@app.route("/clubs")
+def clubs():
+    return render_template('clubs.html', title='Clubs')
+
+@app.route("/help_desk")
+def help_desk():
+    return render_template('help_desk.html', title='Help-Desk')
+
+@app.route("/profile/<string:username>")
+@login_required
+def profile(username):
+    user = User.query.filter_by(username=username).first()
+    posts_count = len(Post.query.filter_by(user_id=user.id).all())
+    image_file = url_for('static', filename='profile_pics/' + user.image_file)
+    return render_template('profile.html', user=user, image_file=image_file, posts_count=posts_count)

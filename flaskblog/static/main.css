@@ -9,7 +9,6 @@ body {
   }
   
   .bg-steel {
-    /* background-color: #5f788a; */
     background-color: #313131;
   }
   
@@ -92,16 +91,39 @@ body {
     height:30px;
     width:30px;
   }
+  .club_cover{
+    height:300px;
+    width:300px;
+  }
+  #saeclub_cover{
+    height:300px;
+    width:500px;
+  }
+  a.no-color {
+    color:black;
+  }
 
 @media(max-width:767px){
   .account-heading {
     font-size: 1.5rem;
   }
   .account-img {
-    height: 60px;
-    width: 50x;
+    height: 50px;
+    width: 50px;
     border-radius: 50%;
     margin-right: 20px;
     margin-bottom: 16px;
+  }
+  .rounded-circle{
+    height: 50px;
+    width: 50px;
+  }
+  .club_cover{
+    height:200px;
+    width:200px;
+  }
+  #saeclub_cover{
+    height:180px;
+    width:250px;
   }
 }
