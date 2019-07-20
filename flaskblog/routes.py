@@ -258,4 +258,19 @@ def user_list(content, id):
     for i in lst:
         user_1 = User.query.filter_by(id=i).first()
         users.append(user_1)        
+    for user in users:
+        current_lst = list(map(int,current_user.connected_users.split()))
+        if user.id in current_lst:
+            user.email =1
+        elif user.id == current_user.id:
+            user.email =2
+        else:  
+            user.email =3 
     return render_template('user_list.html', users=users, legend=legend)    
+
+@app.route("/messages//<int:user_id>", methods=['POST', 'GET'])
+@login_required
+def messages(user_id):
+    form = CommentForm()
+    user = User.query.filter_by(id=user_id).first()
+    return render_template('messages.html', user=user, legend="Message-Box", form=form)        
