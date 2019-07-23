@@ -3,8 +3,8 @@ import secrets
 from PIL import Image
 from flask import render_template, url_for, flash, redirect, request, abort
 from flaskblog import app, db, bcrypt
-from flaskblog.forms import RegistrationForm, LoginForm, UpdateAccountForm, PostForm, CommentForm
-from flaskblog.models import User, Post, Comment
+from flaskblog.forms import RegistrationForm, LoginForm, UpdateAccountForm, PostForm, CommentForm, MessageForm
+from flaskblog.models import User, Post, Comment, Message
 from flask_login import login_user, current_user, logout_user, login_required
 
 
@@ -267,10 +267,50 @@ def user_list(content, id):
         else:  
             user.email =3 
     return render_template('user_list.html', users=users, legend=legend)    
+        
 
-@app.route("/messages//<int:user_id>", methods=['POST', 'GET'])
+# @app.route("/search",methods=['POST','GET'])
+# @login_required
+# def search():
+#     if request.method =="POST":
+#         search_request=request.form['name']
+#         user=search_request.lower()
+#         call=User.query.all()
+#         for m in call:
+#             if m.username.lower() == user or m.email==user:
+#                 return redirect(url_for('profile',username=m.username))
+#             else:
+#                 flash(search_request +' not found', 'danger')
+#                 return redirect(request.referrer)    
+
+@app.route("/search",methods=['POST','GET'])
 @login_required
-def messages(user_id):
-    form = CommentForm()
-    user = User.query.filter_by(id=user_id).first()
-    return render_template('messages.html', user=user, legend="Message-Box", form=form)        
+def search():
+    if request.method =="POST":
+        search_request=request.form['name']
+        searched_user=search_request.lower()
+        Users=User.query.all()
+        username_list=[]
+        for user in Users:
+            if searched_user == user.username.lower()[:len(searched_user)]:
+                username_list.append(user)
+            elif user.email==searched_user:
+                return redirect(url_for('profile',username=user.username))
+        return render_template('search_user.html',username_list=username_list, legend="Search User")        
+    else :
+        flash('Invalid request', 'danger')
+
+
+@app.route("/messages/<int:user_id>/<int:current_user_id>", methods=['POST', 'GET'])
+@login_required
+def messages(user_id,current_user_id):
+    user = User.query.get_or_404(user_id)
+    form = MessageForm()
+    if form.validate_on_submit():
+        message = Message(message=form.content.data, receiver_id=user_id, sender_id=current_user_id)
+        db.session.add(message)
+        db.session.commit()
+        flash('Message sent successfully!', 'success')
+        return redirect(url_for('messages',user_id=user_id,current_user_id=current_user_id))
+    messages=Message.query.filter_by(receiver_id=user_id,sender_id=current_user_id).all()    
+    return render_template('messages.html', receiver = user, messages = messages, legend = 'Messages', form = form)
