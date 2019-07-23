@@ -304,7 +304,6 @@ def search():
 @app.route("/messages/<int:user_id>/<int:current_user_id>", methods=['POST', 'GET'])
 @login_required
 def messages(user_id,current_user_id):
-    user = User.query.get_or_404(user_id)
     form = MessageForm()
     if form.validate_on_submit():
         message = Message(message=form.content.data, receiver_id=user_id, sender_id=current_user_id)
@@ -312,5 +311,15 @@ def messages(user_id,current_user_id):
         db.session.commit()
         flash('Message sent successfully!', 'success')
         return redirect(url_for('messages',user_id=user_id,current_user_id=current_user_id))
-    messages=Message.query.filter_by(receiver_id=user_id,sender_id=current_user_id).all()    
-    return render_template('messages.html', receiver = user, messages = messages, legend = 'Messages', form = form)
+    messages_id=[]    
+    messages1=Message.query.filter_by(receiver_id=user_id,sender_id=current_user_id).all()
+    for message in messages1:
+        messages_id.append(message.id)
+    messages2=Message.query.filter_by(receiver_id=current_user_id,sender_id=user_id).all()
+    for message in messages2:
+        messages_id.append(message.id)    
+    messages=[]    
+    for id in messages_id:
+        messages.append(Message.query.filter_by(id=id).first())
+    current_receiver = User.query.filter_by(id=user_id).first()        
+    return render_template('messages.html', messages = messages, current_receiver=current_receiver, legend = 'Messages', form = form)
