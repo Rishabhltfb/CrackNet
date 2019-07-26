@@ -269,20 +269,6 @@ def user_list(content, id):
     return render_template('user_list.html', users=users, legend=legend)    
         
 
-# @app.route("/search",methods=['POST','GET'])
-# @login_required
-# def search():
-#     if request.method =="POST":
-#         search_request=request.form['name']
-#         user=search_request.lower()
-#         call=User.query.all()
-#         for m in call:
-#             if m.username.lower() == user or m.email==user:
-#                 return redirect(url_for('profile',username=m.username))
-#             else:
-#                 flash(search_request +' not found', 'danger')
-#                 return redirect(request.referrer)    
-
 @app.route("/search",methods=['POST','GET'])
 @login_required
 def search():
@@ -304,22 +290,26 @@ def search():
 @app.route("/messages/<int:user_id>/<int:current_user_id>", methods=['POST', 'GET'])
 @login_required
 def messages(user_id,current_user_id):
-    form = MessageForm()
-    if form.validate_on_submit():
-        message = Message(message=form.content.data, receiver_id=user_id, sender_id=current_user_id)
-        db.session.add(message)
-        db.session.commit()
-        flash('Message sent successfully!', 'success')
-        return redirect(url_for('messages',user_id=user_id,current_user_id=current_user_id))
-    messages_id=[]    
-    messages1=Message.query.filter_by(receiver_id=user_id,sender_id=current_user_id).all()
-    for message in messages1:
-        messages_id.append(message.id)
-    messages2=Message.query.filter_by(receiver_id=current_user_id,sender_id=user_id).all()
-    for message in messages2:
-        messages_id.append(message.id)    
-    messages=[]    
-    for id in messages_id:
-        messages.append(Message.query.filter_by(id=id).first())
-    current_receiver = User.query.filter_by(id=user_id).first()        
-    return render_template('messages.html', messages = messages, current_receiver=current_receiver, legend = 'Messages', form = form)
+    if current_user.id == current_user_id:
+        form = MessageForm()
+        if form.validate_on_submit():
+            message = Message(message=form.content.data, receiver_id=user_id, sender_id=current_user_id)
+            db.session.add(message)
+            db.session.commit()
+            flash('Message sent successfully!', 'success')
+            return redirect(url_for('messages',user_id=user_id,current_user_id=current_user_id))
+        messages_id=[]    
+        messages1=Message.query.filter_by(receiver_id=user_id,sender_id=current_user_id).all()
+        for message in messages1:
+            messages_id.append(message.id)
+        messages2=Message.query.filter_by(receiver_id=current_user_id,sender_id=user_id).all()
+        for message in messages2:
+            messages_id.append(message.id)    
+        messages=[]    
+        for id in messages_id:
+            messages.append(Message.query.filter_by(id=id).first())
+        current_receiver = User.query.filter_by(id=user_id).first()        
+        return render_template('messages.html', messages = messages, current_receiver=current_receiver, legend = 'Messages', form = form)
+    else:
+        flash('Dont try to be Oversmart!', 'danger')
+        return redirect(url_for('home'))
