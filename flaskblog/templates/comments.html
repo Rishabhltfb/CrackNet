@@ -5,7 +5,7 @@
             {{ form.hidden_tag() }}
             <fieldset class="form-group">
                 <legend class="border-bottom mb-4">{{ legend }}</legend>
-                {% for comment in comments %}
+                {% for comment in comments|sort(attribute='date_posted')|reverse %}
                     <article class="media content-section">
                     <img class="rounded-circle article-img" src="{{ url_for('static', filename='profile_pics/' + comment.author.image_file) }}">
                     <div class="media-body">
@@ -21,6 +21,8 @@
                     </div>
                     </article>
                 {% endfor %}
+            </fieldset>
+            <div class="container-fluid" style="position: sticky;bottom: 0;width:100%;background-color: #fff;">
                 <div class="form-group">
                     {{ form.content.label(class="form-control-label") }}
                     {% if form.content.errors %}
@@ -34,9 +36,9 @@
                         {{ form.content(class="form-control form-control-lg") }}
                     {% endif %}
                 </div>
-            </fieldset>
-            <div class="form-group">
-                {{ form.submit(class="btn btn-outline-info") }}
+                <div class="form-group">
+                    {{ form.submit(class="btn btn-info mb-3") }}
+                </div>
             </div>
         </form>
     </div>

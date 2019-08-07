@@ -106,10 +106,62 @@ body {
     color:white;
   }
 
+  .intro-pic{
+    border-radius: 50%;
+    height: 300px;
+    width: 300px;
+  }
+
 .user-msg-shade{
   background-color: #cbd5db;
   /* background-color: #e3e3e3; */
   /* background-color: antiquewhite; */
+}
+
+/* Contact Section */
+.contact{
+  text-align: center;
+}
+.contact-row1{
+  text-align: center;
+  margin-bottom: 20px;
+}
+.Section_head{
+  text-align: center;
+  margin: auto;
+  font-size: 60px;
+  padding:10px;
+  text-shadow: 5px 6px 5px grey;
+  text-shadow: 5px 6px 6px black;
+  font-weight: bold;
+}
+#Contact_para{
+  color:#222221;
+  font-weight: bold;
+  font-family: 'Fresca', sans-serif;
+  font-size: 30px;
+}
+.pic_row{
+  text-align: center;
+
+}
+.contact_boy{
+  margin: auto;
+  height: 200px;
+  width: 200px;
+}
+.contact-row3{
+  margin-top: 30px;
+  margin-bottom: 10px;
+}
+.contact_icons{
+  height:40px;
+  width:40px;
+
+}
+.contact_icons:hover{
+  cursor: pointer;
+  transform: scale(1.1);
 }
 
 @media(max-width:767px){

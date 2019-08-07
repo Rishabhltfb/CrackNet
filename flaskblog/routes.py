@@ -84,6 +84,11 @@ def save_picture(form_picture):
 @login_required
 def account():
     form = UpdateAccountForm()
+    page = request.args.get('page', 1, type=int)
+    user = User.query.filter_by(username=current_user.username).first_or_404()
+    posts = Post.query.filter_by(author=user)\
+        .order_by(Post.date_posted.desc())\
+        .paginate(page=page, per_page=5)
     posts_count = len(Post.query.filter_by(user_id=current_user.id).all())
     if form.validate_on_submit():
         if form.picture.data:
@@ -100,7 +105,7 @@ def account():
     image_file = url_for('static', filename='profile_pics/' + current_user.image_file)
     connections = current_user.connections
     return render_template('account.html', title='Account',
-                           image_file=image_file, form=form, posts_count=posts_count, connections = connections)
+                           image_file=image_file, form=form, posts_count=posts_count, connections = connections, posts=posts, user=user)
 
 
 @app.route("/post/new", methods=['GET', 'POST'])
@@ -155,15 +160,6 @@ def delete_post(post_id):
     return redirect(url_for('home'))
 
 
-@app.route("/user/<string:username>")
-def user_posts(username):
-    page = request.args.get('page', 1, type=int)
-    user = User.query.filter_by(username=username).first_or_404()
-    posts = Post.query.filter_by(author=user)\
-        .order_by(Post.date_posted.desc())\
-        .paginate(page=page, per_page=5)
-    return render_template('user_posts.html', posts=posts, user=user)
-
 @app.route("/likes/<int:post_id>", methods=['POST', 'GET'])
 @login_required
 def likes(post_id):
@@ -172,11 +168,9 @@ def likes(post_id):
     if current_user.id in lst:
         post.likes -= 1
         lst.remove(current_user.id)
-        flash('UnLiked!', 'danger')
     else:         
         lst.append(current_user.id)
         post.likes += 1
-        flash('Like Done!', 'success')
     lst = list(map(str,lst))
     post.liked_users = " ".join(lst)
     db.session.commit()
@@ -190,7 +184,6 @@ def comments(post_id):
         comment = Comment(content=form.content.data, user_id=current_user.id, post_id=post_id)
         db.session.add(comment)
         db.session.commit()
-        flash('Commented!', 'success')
         return redirect(url_for('comments',post_id=post_id))
     comments = Comment.query.filter_by(post_id=post_id).all()
     return render_template('comments.html', comments=comments,legend='Comments',form=form)
@@ -206,7 +199,11 @@ def help_desk():
 @app.route("/profile/<string:username>")
 @login_required
 def profile(username):
+    page = request.args.get('page', 1, type=int)
     user = User.query.filter_by(username=username).first()
+    posts = Post.query.filter_by(author=user)\
+        .order_by(Post.date_posted.desc())\
+        .paginate(page=page, per_page=5)
     posts_count = len(Post.query.filter_by(user_id=user.id).all())
     connections = user.connections
     connected_users = user.connected_users
@@ -216,7 +213,7 @@ def profile(username):
         is_connected = True
     else:
         is_connected = False
-    return render_template('profile.html', user=user, image_file=image_file, posts_count=posts_count, connections = connections, connected_users= connected_users, is_connected=is_connected)
+    return render_template('profile.html', user=user, posts=posts, image_file=image_file, posts_count=posts_count, connections = connections, connected_users= connected_users, is_connected=is_connected)
 
 @app.route("/connections/<int:user_id>")
 @login_required
@@ -296,7 +293,6 @@ def messages(user_id,current_user_id):
             message = Message(message=form.content.data, receiver_id=user_id, sender_id=current_user_id)
             db.session.add(message)
             db.session.commit()
-            flash('Message sent successfully!', 'success')
             return redirect(url_for('messages',user_id=user_id,current_user_id=current_user_id))
         messages_id=[]    
         messages1=Message.query.filter_by(receiver_id=user_id,sender_id=current_user_id).all()
