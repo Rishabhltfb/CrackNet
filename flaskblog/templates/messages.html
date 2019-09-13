@@ -5,7 +5,7 @@
             {{ form.hidden_tag() }}
             <fieldset class="form-group">
                 <legend class="border-bottom mb-4">{{ legend }}</legend>
-                {% for message in messages|sort(attribute='id') %}
+                {% for message in messages|sort(attribute='id')|reverse %}
                     {% if message.sender_id == current_user.id %}
                         <article class="media content-section user-msg-shade">
                             <img class="rounded-circle article-img" src="{{ url_for('static', filename='profile_pics/' + current_user.image_file) }}">
@@ -30,6 +30,8 @@
                         </article>
                     {% endif %}    
                 {% endfor %}
+            </fieldset>
+            <div class="container-fluid" style="position: sticky;bottom: 0;width:100%;background-color: #fff;">
                 <div class="form-group">
                     {{ form.content.label(class="form-control-label") }}
                     {% if form.content.errors %}
@@ -43,10 +45,10 @@
                         {{ form.content(class="form-control form-control-lg") }}
                     {% endif %}
                 </div>
-            </fieldset>
-            <div class="form-group">
-                {{ form.submit(class="btn btn-outline-info") }}
-            </div>
+                <div class="form-group">
+                    {{ form.submit(class="btn btn-outline-info") }}
+                </div>
+            </div>        
         </form>
     </div>
 {% endblock content %}

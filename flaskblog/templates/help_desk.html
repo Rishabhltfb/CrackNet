@@ -16,10 +16,11 @@
                     <a class="dropdown-item" data-toggle="modal" href="#2Modal"><i class="fas fa-map-marker-alt"></i> Library</a>
                     <a class="dropdown-item" data-toggle="modal" href="#3Modal"><i class="fas fa-map-marker-alt"></i> Computer Center</a>
                     <a class="dropdown-item" data-toggle="modal" href="#4Modal"><i class="fas fa-map-marker-alt"></i> NRSC</a>
-                    <a class="dropdown-item" data-toggle="modal" href="#4Modal"><i class="fas fa-map-marker-alt"></i> AMU ROBOCLUB</a>
+                    <a class="dropdown-item" data-toggle="modal" href="#5Modal"><i class="fas fa-map-marker-alt"></i> AMU ROBOCLUB</a>
+                    <a class="dropdown-item" data-toggle="modal" href="#6Modal"><i class="fas fa-map-marker-alt"></i> NL BLOCK</a>
             </li>
         </div>
-        {% set ids=[1,2,3,4,5] %}
+        {% set ids=[1,2,3,4,5,6] %}
         {% for id in ids %}
             <!-- Modal -->
             <div class="modal fade modal-map" id="{{ id }}Modal" role="dialog">
@@ -41,7 +42,9 @@
                             {% elif id== 4 %}
                                 <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3525.756718671996!2d78.07228621493564!3d27.90943808270858!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3974a4faed89a7bb%3A0xd664a0cb1e615291!2sNRSC+Provost+Office!5e0!3m2!1sen!2sin!4v1563946175588!5m2!1sen!2sin" width="95%" height="85%" frameborder="0" style="border:0" allowfullscreen></iframe>
                             {% elif id== 5 %}    
-                                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3525.5974027633906!2d78.07493051493564!3d27.914325482706648!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3974a4e350ff3bd7%3A0x56f1c0681905618c!2sAMU+Robo+Club+Rd%2C+Aligarh%2C+Uttar+Pradesh+202001!5e0!3m2!1sen!2sin!4v1563946454517!5m2!1sen!2sin" width="600" height="450" frameborder="0" style="border:0" allowfullscreen></iframe>
+                                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3525.5974027633906!2d78.07493051493564!3d27.914325482706648!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3974a4e350ff3bd7%3A0x56f1c0681905618c!2sAMU+Robo+Club+Rd%2C+Aligarh%2C+Uttar+Pradesh+202001!5e0!3m2!1sen!2sin!4v1563946454517!5m2!1sen!2sin" width="95%" height="85%" frameborder="0" style="border:0" allowfullscreen></iframe>
+                            {% elif id== 6 %}    
+                                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3525.5865893185514!2d78.07749021493571!3d27.914657182706545!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3974a4e382d1f4cd%3A0x40ded915c2569f5d!2sNL+Block%2C+AMU+Campus%2C+Aligarh%2C+Uttar+Pradesh+202001!5e0!3m2!1sen!2sin!4v1565450064187!5m2!1sen!2sin" width="95%" height="85%" frameborder="0" style="border:0" allowfullscreen></iframe>
                             {% endif %}
                         </div>
                         <div class="modal-footer">
